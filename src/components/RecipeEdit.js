@@ -40,18 +40,24 @@ export default function RecipeEdit() {
         <label htmlFor="instructions" className="recipe-edit__label">
           Instructions
         </label>
-        <textarea name="instructions" id="instructions"></textarea>
+        <textarea 
+        name="instructions" 
+        id="instructions"
+        className="recipe-edit__input"></textarea>
       </div>
       <br />
-      <label>Ingredients</label>
-      <div>
+      <label className="recipe-edit__label">Ingredients</label>
+      <div className="recipe-edit__ingredient-grid">
         <div>Name</div>
         <div>Amount</div>
         <div></div>
         <RecipeIngredientEdit />
         <RecipeIngredientEdit />
       </div>
-      <button>Add Ingredient</button>
+      <div className="recipe-edit__add-ingredient-btn-container">
+      <button className="btn btn--primary">Add Ingredient</button>
+        </div>
+     
     </div>
   )
 }
