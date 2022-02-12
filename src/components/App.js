@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from "react"
-import RecipeList from "./RecipeList"
-import RecipeEdit from "./RecipeEdit"
-import "../css/app.css"
-import { v4 as uuidv4 } from "uuid"
+import React, { useState, useEffect } from "react";
+import RecipeList from "./RecipeList";
+import RecipeEdit from "./RecipeEdit";
+import "../css/app.css";
+import { v4 as uuidv4 } from "uuid";
 
-export const RecipeContext = React.createContext()
-const LOCAL_STORAGE_KEY = "cookingWithReact.recipes"
+export const RecipeContext = React.createContext();
+const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
 function App() {
-  const [recipes, setRecipes] = useState(sampleRecipes)
+  const [selectedRecipeId, setSelectedRecipeId] = useState();
+  const [recipes, setRecipes] = useState(sampleRecipes);
+  const selectedRecipe = recipes.find(
+    (recipe) => recipe.id === selectedRecipeId
+  );
 
   useEffect(() => {
-    const recipeJSON = localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (recipeJSON != null) setRecipes(JSON.parse(recipeJSON))
-  }, [])
+    const recipeJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (recipeJSON != null) setRecipes(JSON.parse(recipeJSON));
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(recipes))
-  }, [recipes])
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(recipes));
+  }, [recipes]);
 
   const handleRecipeAdd = () => {
     const newRecipe = {
@@ -32,25 +36,28 @@ function App() {
           amount: "1 Tbsp",
         },
       ],
-    }
-    setRecipes([...recipes, newRecipe])
-  }
-
+    };
+    setRecipes([...recipes, newRecipe]);
+  };
+  const handleRecipeSelect = (id) => {
+    setSelectedRecipeId(id);
+  };
   const handleRecipeDelete = (id) => {
-    setRecipes(recipes.filter((recipe) => recipe.id !== id))
-  }
+    setRecipes(recipes.filter((recipe) => recipe.id !== id));
+  };
 
   const recipeContextValue = {
     handleRecipeAdd,
     handleRecipeDelete,
-  }
+    handleRecipeSelect,
+  };
 
   return (
     <RecipeContext.Provider value={recipeContextValue}>
       <RecipeList recipes={recipes} />
-      <RecipeEdit />
+      {selectedRecipe && <RecipeEdit recipe={selectedRecipe} />}
     </RecipeContext.Provider>
-  )
+  );
 }
 
 const sampleRecipes = [
@@ -111,5 +118,5 @@ const sampleRecipes = [
       },
     ],
   },
-]
-export default App
+];
+export default App;
